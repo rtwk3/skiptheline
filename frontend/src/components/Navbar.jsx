@@ -2,6 +2,7 @@ import React from 'react'
 import { Menu, ShoppingCart, Bell } from 'lucide-react'
 import { Button } from './ui/Button'
 import { Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export function Navbar({ onMenuClick, cartCount }) {
   return (
@@ -11,27 +12,35 @@ export function Navbar({ onMenuClick, cartCount }) {
           <Button variant="ghost" size="icon" className="md:hidden" onClick={onMenuClick}>
             <Menu size={20} />
           </Button>
-          <h2 className="text-lg font-semibold md:hidden">Smart Canteen</h2>
+          <h2 className="text-xl font-bold md:hidden text-gradient">Smart Canteen</h2>
         </div>
         
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="relative hidden md:flex">
-            <Bell size={20} />
-            <span className="absolute top-2 right-2.5 h-2 w-2 rounded-full bg-red-500"></span>
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" className="relative hidden md:flex hover:bg-slate-100/50 rounded-full">
+            <Bell size={20} className="text-slate-600" />
+            <span className="absolute top-2 right-2.5 h-2 w-2 rounded-full bg-primary animate-pulse"></span>
           </Button>
           
           <Link to="/cart">
-            <Button variant="ghost" size="icon" className="relative group">
-              <ShoppingCart size={20} className="group-hover:text-primary transition-colors" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
-                  {cartCount}
-                </span>
-              )}
+            <Button variant="ghost" size="icon" className="relative group hover:bg-slate-100/50 rounded-full">
+              <ShoppingCart size={20} className="text-slate-600 group-hover:text-primary transition-colors" />
+              <AnimatePresence>
+                {cartCount > 0 && (
+                  <motion.span 
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                    className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-sm ring-2 ring-white"
+                  >
+                    {cartCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </Button>
           </Link>
           
-          <div className="h-8 w-8 rounded-full bg-slate-200 border-2 border-white shadow-sm ml-2 overflow-hidden flex items-center justify-center text-xs font-semibold text-slate-500">
+          <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-primary to-orange-400 border-2 border-white shadow-sm ml-2 overflow-hidden flex items-center justify-center text-sm font-semibold text-white cursor-pointer hover:shadow-md transition-shadow">
             U
           </div>
         </div>

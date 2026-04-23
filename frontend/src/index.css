@@ -1,42 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: #f8fafc;
-    --foreground: #0f172a;
-    
-    --primary: #2563eb;
-    --primary-foreground: #ffffff;
-    
-    --card: #ffffff;
-    --card-foreground: #0f172a;
-    
-    --accent: #f1f5f9;
-    --accent-foreground: #0f172a;
-    
-    --muted: #64748b;
-    --radius: 0.75rem;
-  }
+@theme {
+  --color-background: #fdfdfd;
+  --color-foreground: #0f172a;
+  
+  --color-primary: #FF5A5F;
+  --color-primary-foreground: #ffffff;
+  
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+  
+  --color-accent: #f8fafc;
+  --color-accent-foreground: #0f172a;
+  
+  --color-muted: #64748b;
+  --radius: 1.2rem;
 }
 
 @layer base {
   * {
-    @apply border-gray-200;
+    @apply border-gray-100;
   }
   body {
-    @apply bg-[var(--background)] text-[var(--foreground)] font-sans antialiased;
+    @apply bg-slate-50 text-foreground font-sans antialiased bg-fixed;
+    font-family: 'Outfit', sans-serif;
+    /* Soft ambient background gradient */
+    background-image: radial-gradient(at 0% 0%, hsla(358, 100%, 88%, 0.3) 0px, transparent 50%),
+                      radial-gradient(at 100% 0%, hsla(210, 100%, 88%, 0.3) 0px, transparent 50%);
   }
 }
 
 /* Custom Utilities for smooth shadows and transitions */
 @layer utilities {
   .glass {
-    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-sm;
+    @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm;
   }
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+    @apply transition-all duration-500 ease-out hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2;
   }
   /* Hide scrollbar for clean look */
   .no-scrollbar::-webkit-scrollbar {
@@ -45,5 +47,9 @@
   .no-scrollbar {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-orange-400;
   }
 }

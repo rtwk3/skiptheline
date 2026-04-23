@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import { Navbar } from './components/Navbar'
 import { Sidebar } from './components/Sidebar'
 
@@ -11,12 +12,12 @@ import { QueueStatus } from './pages/QueueStatus'
 
 // Mock Data
 const MOCK_MENU = [
-  { id: 1, name: 'Classic Smash Burger', price: 8.99, description: 'Double beef patty, american cheese, house sauce on brioche.', image: 'burger' },
-  { id: 2, name: 'Spicy Chicken Sandwich', price: 9.49, description: 'Crispy fried chicken, spicy mayo, pickles, jalapenos.', image: 'chicken' },
-  { id: 3, name: 'Caesar Salad', price: 6.99, description: 'Fresh romaine, parmesan flakes, croutons, creamy caesar dressing.', image: 'salad' },
-  { id: 4, name: 'Margherita Pizza', price: 11.99, description: 'San marzano tomato sauce, fresh mozzarella, basil.', image: 'pizza' },
-  { id: 5, name: 'Loaded Fries', price: 5.49, description: 'Crispy fries topped with cheese sauce, bacon bits, scallions.', image: 'fries' },
-  { id: 6, name: 'Iced Latte', price: 4.50, description: 'Espresso over ice with your choice of milk.', image: 'coffee' }
+  { id: 1, name: 'Classic Smash Burger', price: 8.99, description: 'Double beef patty, american cheese, house sauce on brioche.', image: '/images/burger.png' },
+  { id: 2, name: 'Spicy Chicken Sandwich', price: 9.49, description: 'Crispy fried chicken, spicy mayo, pickles, jalapenos.', image: '/images/chicken.png' },
+  { id: 3, name: 'Caesar Salad', price: 6.99, description: 'Fresh romaine, parmesan flakes, croutons, creamy caesar dressing.', image: '/images/salad.png' },
+  { id: 4, name: 'Margherita Pizza', price: 11.99, description: 'San marzano tomato sauce, fresh mozzarella, basil.', image: '/images/pizza.png' },
+  { id: 5, name: 'Loaded Fries', price: 5.49, description: 'Crispy fries topped with cheese sauce, bacon bits, scallions.', image: '/images/fries.png' },
+  { id: 6, name: 'Iced Latte', price: 4.50, description: 'Espresso over ice with your choice of milk.', image: '/images/coffee.png' }
 ]
 
 function AppContent() {
@@ -24,6 +25,7 @@ function AppContent() {
   const [cart, setCart] = useState([])
   const [orders, setOrders] = useState([])
   const navigate = useNavigate()
+  const location = useLocation()
 
   // Find active order for queue
   const activeOrder = orders.find(o => o.status === 'Preparing' || o.status === 'Ready')
@@ -79,20 +81,22 @@ function AppContent() {
           cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)} 
         />
         
-        <main className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
-          <Routes>
-            <Route path="/" element={<Home menuItems={MOCK_MENU} onAddToCart={handleAddToCart} />} />
-            <Route path="/cart" element={
-              <Cart 
-                cartItems={cart} 
-                onUpdateQuantity={handleUpdateQuantity} 
-                onRemove={handleRemove} 
-                onCheckout={handleCheckout} 
-              />
-            } />
-            <Route path="/orders" element={<Orders orders={orders} />} />
-            <Route path="/queue" element={<QueueStatus activeOrder={activeOrder} />} />
-          </Routes>
+        <main className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full relative">
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Home menuItems={MOCK_MENU} onAddToCart={handleAddToCart} />} />
+              <Route path="/cart" element={
+                <Cart 
+                  cartItems={cart} 
+                  onUpdateQuantity={handleUpdateQuantity} 
+                  onRemove={handleRemove} 
+                  onCheckout={handleCheckout} 
+                />
+              } />
+              <Route path="/orders" element={<Orders orders={orders} />} />
+              <Route path="/queue" element={<QueueStatus activeOrder={activeOrder} />} />
+            </Routes>
+          </AnimatePresence>
         </main>
       </div>
     </div>
